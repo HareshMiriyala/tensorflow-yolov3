@@ -5,11 +5,11 @@ email : haresh.miriyala@utexas.edu
 Name : Haresh Karnan
 """
 import rospy
+import sys
 import cv2
 import time
 import numpy as np
 import tensorflow as tf
-import sys
 import math
 from PIL import Image
 from openpose_ros_msgs.msg import OpenPoseHumanList
@@ -66,7 +66,7 @@ class openni_camera():
         self.cv_image = None
         self.bridge = CvBridge()
         self.display = display # display bool
-        rospy.Subscriber("/camera/rgb/image_raw", Img, self.camera_callback)
+        rospy.Subscriber("/hsrb/head_rgbd_sensor/rgb/image_raw", Img, self.camera_callback)
 
     def camera_callback(self,data):
         cv_image = numpify(data)
@@ -88,7 +88,6 @@ def len_side(x1,y1,x2,y2):
     return abs(math.sqrt((x2-x1)**2+(y2-y1)**2))
 
 def concave_polygon(box,shoulder,wrist):
-
     print('Box : ')
     print(box)
     print('Shoulder : ')
@@ -164,7 +163,7 @@ if __name__ == '__main__':
 
             # cv2.imshow("yolo_result", yolo_chair)
             # cv2.waitKey(1)
-
+            print(labels)
             if labels is None: continue
             if not 56 in labels: continue  # filtering chairs
             if not 0 in labels: continue  # filtering no humans
